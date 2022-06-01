@@ -10,7 +10,6 @@ import { ToastContainer } from 'react-toastify';
 import App from './App';
 import { store } from './store';
 
-
 const persistor = persistStore(store);
 
 ReactDOM.render(
@@ -26,6 +25,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-
-
