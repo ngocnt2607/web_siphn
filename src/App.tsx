@@ -4,6 +4,7 @@ import StorageService from 'app/services/storage';
 import React, { Suspense, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AuthGuard from 'routes/auth-guard';
+import ErrorGuard from 'routes/error-guard';
 import LoginGuard from 'routes/login-guard';
 import LoadingComponent from 'shared/blocks/loading/loading.component';
 import './styles/index.scss';
@@ -92,6 +93,8 @@ function App() {
               </AuthGuard>
             }
           />
+
+          <Route path="*" element={<ErrorGuard />} />
         </Routes>
       </Suspense>
     </ThemeProvider>
