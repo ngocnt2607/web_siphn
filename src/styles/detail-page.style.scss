@@ -1,0 +1,32 @@
+.detail-page {
+  margin-top: 8.7rem;
+
+  .back {
+    cursor: pointer;
+
+    svg {
+      @extend .font--16sb;
+    }
+
+    p {
+      @extend .font--16sb;
+    }
+  }
+
+  .data-grid {
+    @extend .data-grid-custom;
+
+    .css-ganwqa-MuiDataGrid-root .MuiDataGrid-cell {
+      padding-top: $space-XS;
+      overflow: auto;
+      white-space: initial;
+      align-items: flex-start;
+      display: flex;
+      flex-wrap: wrap;
+
+      .cell-action {
+        margin-top: -$space-XXS;
+      }
+    }
+  }
+}

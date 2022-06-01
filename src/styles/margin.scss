@@ -1,0 +1,40 @@
+@use 'sass:map';
+@use 'sass:math';
+@import './variables';
+
+/**
+* Add more spacing if you need 
+* If spacing not available in variables.scss, let use system properties of MUI component
+*/
+$_spacings: (
+  XXS: $space-XXS,
+  XS: $space-XS,
+  S: $space-S,
+  MS: $space-MS,
+  M: $space-M,
+  ML: $space-ML,
+  L: $space-L,
+  LL: $space-LL,
+  XL: $space-XL,
+  XXL: $space-XXL,
+  XXXL: $space-XXXL,
+  XXXXL: $space-XXXXL,
+);
+
+@each $_spacing_key, $_spacing in $_spacings {
+  .mt--#{$_spacing_key} {
+    margin-top: $_spacing !important;
+  }
+
+  .mr--#{$_spacing_key} {
+    margin-right: $_spacing !important;
+  }
+
+  .mb--#{$_spacing_key} {
+    margin-bottom: $_spacing !important;
+  }
+
+  .ml--#{$_spacing_key} {
+    margin-left: $_spacing !important;
+  }
+}

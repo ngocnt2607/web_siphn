@@ -1,0 +1,39 @@
+$max-width-layout: 1920px;
+$min-width-screen-xl: 1536px;
+$max-width-container: 1700px;
+$max-screen-lg: 1200px;
+$max-screen-md: 992px;
+
+// Color Variables
+$color-black: #000000;
+$color-background: #f2f2f7;
+$color-sub-black: #a3a6b7;
+$color-blue-light: #c4eaf8;
+$color-blue-light1: #a1e1f7;
+$color-primary: #2f80ed;
+$color-sub-black1: #6d7080;
+$color-body-black: #424242;
+$color-gray-border: rgba(224, 224, 224, 1);
+$color-gray-light: #e3e9ec;
+$color-white: #ffffff;
+$color-success: #5cb85c;
+$color-green-light: #35d500;
+$color-error: #d32f2f;
+$color-black-blue: #151529;
+$color-edit: #ff9d22;
+$color-edit-light: #f0f797;
+
+// margin/padding
+$space-unit: 20px;
+$space-XXS: 0.5 * $space-unit;
+$space-XS: 1 * $space-unit;
+$space-S: 1.5 * $space-unit;
+$space-MS: 2 * $space-unit;
+$space-M: 2.5 * $space-unit;
+$space-ML: 3 * $space-unit;
+$space-L: 3.5 * $space-unit;
+$space-LL: 4 * $space-unit;
+$space-XL: 4.5 * $space-unit;
+$space-XXL: 5 * $space-unit;
+$space-XXXL: 6 * $space-unit;
+$space-XXXXL: 7 * $space-unit;

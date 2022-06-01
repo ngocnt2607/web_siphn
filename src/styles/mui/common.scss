@@ -1,0 +1,30 @@
+.hint-text {
+  @extend .font--12-8;
+  font-size: 0.8rem;
+  color: $color-sub-black;
+}
+
+.require-field {
+  @extend .font--14sb;
+  &::after {
+    content: '*';
+    margin-left: 1px;
+    color: $color-error;
+  }
+}
+
+//Custom width layout
+.css-19r6kue-MuiContainer-root {
+  @media only screen and (min-width: $min-width-screen-xl) {
+    max-width: $max-width-container !important;
+  }
+}
+
+.MuiInputBase-root.Mui-disabled {
+  background-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+.ellipsis-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

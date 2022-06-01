@@ -1,0 +1,11 @@
+@import 'styles/variables.scss';
+@import 'styles/font.scss';
+@import 'styles/mui/dialog.scss';
+
+.hotline-dialog {
+  @extend .form-dialog;
+
+  .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+    min-height: 26.5rem;
+  }
+}

@@ -1,0 +1,14 @@
+@import 'styles/variables';
+@import 'styles/page.scss';
+@import 'styles/font.scss';
+
+.customer-management {
+  @extend .table-page;
+
+  .MuiTabs-root {
+    button {
+      @extend .font--16b;
+      text-transform: none;
+    }
+  }
+}

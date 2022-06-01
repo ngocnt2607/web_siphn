@@ -1,0 +1,75 @@
+@import 'styles/variables.scss';
+@import 'styles/font.scss';
+
+.mini-drawer {
+  margin-right: 10px;
+  .app-bar {
+    background-color: $color-white !important;
+    height: $space-L;
+
+    .page-name {
+      color: $color-black;
+    }
+
+    .setting {
+      margin-left: auto;
+      color: $color-sub-black1 !important;
+    }
+  }
+
+  .drawer-content {
+    *,
+    *::before,
+    *::after {
+      box-sizing: content-box;
+    }
+
+    .css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
+      @extend .font--14-8md;
+      padding: 0px 5px;
+      color: $color-sub-black;
+      background-color: $color-black-blue;
+
+      .section {
+        @extend .font--11sb;
+        margin-left: $space-XXS;
+        color: $color-sub-black1;
+      }
+
+      .item {
+        .css-wa5fuu-MuiListItemIcon-root {
+          color: $color-sub-black;
+          margin-right: $space-XXS;
+        }
+
+        .css-1ddsiuw-MuiListItemIcon-root {
+          color: $color-sub-black;
+        }
+
+        &:hover {
+          color: $color-white;
+
+          .css-wa5fuu-MuiListItemIcon-root {
+            color: $color-white;
+          }
+
+          .css-1ddsiuw-MuiListItemIcon-root {
+            color: $color-white;
+          }
+        }
+      }
+
+      .item-selected {
+        color: $color-white;
+
+        .css-wa5fuu-MuiListItemIcon-root {
+          color: $color-white;
+        }
+
+        .css-1ddsiuw-MuiListItemIcon-root {
+          color: $color-white;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+@import './button.scss';
+
+.form-dialog {
+  .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+    padding: 3rem;
+    width: 32rem;
+    border-radius: 0.5rem;
+  }
+
+  .form-paper {
+    .width-100 {
+      width: 100%;
+    }
+
+    .action-button {
+      @extend .admin-button;
+      height: 3rem;
+      border-radius: $space-XS;
+      margin-top: $space-S;
+      background: #56ccf2; /* fallback for old browsers */
+      background: -webkit-linear-gradient(
+        to left,
+        $color-primary,
+        $color-blue-light1
+      ); /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(
+        to left,
+        $color-primary,
+        $color-blue-light1
+      ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+      &.--update {
+        background: #cac531; /* fallback for old browsers */
+        background: -webkit-linear-gradient(
+          to left,
+          $color-edit-light,
+          $color-edit
+        ); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(
+          to left,
+          $color-edit-light,
+          $color-edit
+        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      }
+    }
+  }
+}

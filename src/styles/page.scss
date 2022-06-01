@@ -1,0 +1,70 @@
+.data-grid-custom {
+  margin-top: $space-XS;
+  width: 100%;
+  min-height: 10rem;
+  background-color: $color-white;
+
+  .odd {
+    background-color: $color-gray-light;
+  }
+
+  .MuiDataGrid-columnSeparator {
+    visibility: hidden;
+  }
+
+  .MuiDataGrid-iconButtonContainer {
+    margin-left: 3px;
+  }
+
+  .MuiDataGrid-row.Mui-selected {
+    background-color: rgba(25, 118, 210, 0.2);
+  }
+
+  .MuiDataGrid-columnHeader {
+    border-right: 1px solid $color-gray-border;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-within {
+      outline: none;
+    }
+  }
+
+  .MuiDataGrid-cell {
+    border-right: 1px solid $color-gray-border;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-within {
+      outline: none;
+    }
+  }
+
+  .css-17jjc08-MuiDataGrid-footerContainer {
+    p {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+  }
+
+  .css-1s0hp0k-MuiDataGrid-columnHeadersInner {
+    background-color: $color-blue-light;
+  }
+}
+
+.table-page {
+  margin: 9.2rem 0px 2rem 0px;
+
+  .create-button {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .data-grid {
+    @extend .data-grid-custom;
+  }
+}
