@@ -1,10 +1,11 @@
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button, Link } from '@mui/material';
+import { Button } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import CustomerAPI from 'app/api/customer.api';
 import { convertStringToArray } from 'app/helpers/array.helper';
 import useChangePageSize from 'app/hooks/change-page-size.hook';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import CustomRow from 'shared/blocks/custom-row/custom-row.component';
 import LoadingComponent from 'shared/blocks/loading/loading.component';
 import addToast from 'shared/blocks/toastify/add-toast.component';
@@ -37,8 +38,8 @@ function VirtualGroup() {
       sortable: false,
       renderCell: (cellValues) => (
         <Link
-          href={`customer-management/virtual-detail/${cellValues.row.customerId}/${cellValues.row.vngId}`}
-          underline="none"
+          to={`virtual-detail/${cellValues.row.customerId}/${cellValues.row.vngId}`}
+          style={{ textDecoration: 'none' }}
         >
           {cellValues.row.vngName}
         </Link>

@@ -3,6 +3,7 @@
 
   .back {
     cursor: pointer;
+    width: max-content;
 
     svg {
       @extend .font--16sb;
@@ -16,7 +17,7 @@
   .data-grid {
     @extend .data-grid-custom;
 
-    .css-ganwqa-MuiDataGrid-root .MuiDataGrid-cell {
+    .MuiDataGrid-cell {
       padding-top: $space-XS;
       overflow: auto;
       white-space: initial;

@@ -1,5 +1,5 @@
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button, Container, Link } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import CustomerAPI from 'app/api/customer.api';
 import VirtualRoutingAPI, {
@@ -9,6 +9,7 @@ import VirtualRoutingAPI, {
 import useChangePageSize from 'app/hooks/change-page-size.hook';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
 import CellAction from 'shared/blocks/cell-action/cell-action.component';
 import CustomRow from 'shared/blocks/custom-row/custom-row.component';
 import LoadingComponent from 'shared/blocks/loading/loading.component';
@@ -48,8 +49,8 @@ function HotlineRoutingPage() {
 
         return (
           <Link
-            href={`/admin/customer-management/virtual-detail/${customerId}/${vngId}`}
-            underline="none"
+            to={`/admin/customer-management/virtual-detail/${customerId}/${vngId}`}
+            style={{ textDecoration: 'none' }}
             className="ellipsis-text"
           >
             {cellValues.row.vngName}
@@ -68,8 +69,8 @@ function HotlineRoutingPage() {
         return (
           <Link
             key={vngViettelTrunk?.trunkId}
-            href={`/admin/trunk-management/detail/${vngViettelTrunk?.groupCode}/${vngViettelTrunk?.trunkId}`}
-            underline="none"
+            to={`/admin/trunk-management/detail/${vngViettelTrunk?.groupCode}/${vngViettelTrunk?.trunkId}`}
+            style={{ textDecoration: 'none' }}
             className="ellipsis-text mr--XXS"
           >
             {vngViettelTrunk?.trunkName}
@@ -88,8 +89,8 @@ function HotlineRoutingPage() {
         return (
           <Link
             key={vngMobiTrunk?.trunkId}
-            href={`/admin/trunk-management/detail/${vngMobiTrunk?.groupCode}/${vngMobiTrunk?.trunkId}`}
-            underline="none"
+            to={`/admin/trunk-management/detail/${vngMobiTrunk?.groupCode}/${vngMobiTrunk?.trunkId}`}
+            style={{ textDecoration: 'none' }}
             className="ellipsis-text mr--XXS"
           >
             {vngMobiTrunk?.trunkName}
@@ -108,8 +109,8 @@ function HotlineRoutingPage() {
         return (
           <Link
             key={vngVinaTrunk?.trunkId}
-            href={`/admin/trunk-management/detail/${vngVinaTrunk?.groupCode}/${vngVinaTrunk?.trunkId}`}
-            underline="none"
+            to={`/admin/trunk-management/detail/${vngVinaTrunk?.groupCode}/${vngVinaTrunk?.trunkId}`}
+            style={{ textDecoration: 'none' }}
             className="ellipsis-text mr--XXS"
           >
             {vngVinaTrunk?.trunkName}
@@ -128,8 +129,8 @@ function HotlineRoutingPage() {
         return (
           <Link
             key={vngDefaultTrunk?.trunkId}
-            href={`/admin/trunk-management/detail/${vngDefaultTrunk?.groupCode}/${vngDefaultTrunk?.trunkId}`}
-            underline="none"
+            to={`/admin/trunk-management/detail/${vngDefaultTrunk?.groupCode}/${vngDefaultTrunk?.trunkId}`}
+            style={{ textDecoration: 'none' }}
             className="ellipsis-text mr--XXS"
           >
             {vngDefaultTrunk?.trunkName}

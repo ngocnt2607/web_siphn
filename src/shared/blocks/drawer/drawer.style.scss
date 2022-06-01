@@ -24,7 +24,7 @@
       box-sizing: content-box;
     }
 
-    .css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
+    .MuiDrawer-paper {
       @extend .font--14-8md;
       padding: 0px 5px;
       color: $color-sub-black;
@@ -37,23 +37,23 @@
       }
 
       .item {
-        .css-wa5fuu-MuiListItemIcon-root {
+        .MuiListItemIcon-root {
           color: $color-sub-black;
           margin-right: $space-XXS;
         }
 
-        .css-1ddsiuw-MuiListItemIcon-root {
+        .MuiListItemIcon-root {
           color: $color-sub-black;
         }
 
         &:hover {
           color: $color-white;
 
-          .css-wa5fuu-MuiListItemIcon-root {
+          .MuiListItemIcon-root {
             color: $color-white;
           }
 
-          .css-1ddsiuw-MuiListItemIcon-root {
+          .MuiListItemIcon-root {
             color: $color-white;
           }
         }
@@ -62,11 +62,11 @@
       .item-selected {
         color: $color-white;
 
-        .css-wa5fuu-MuiListItemIcon-root {
+        .MuiListItemIcon-root {
           color: $color-white;
         }
 
-        .css-1ddsiuw-MuiListItemIcon-root {
+        .MuiListItemIcon-root {
           color: $color-white;
         }
       }

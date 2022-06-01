@@ -5,7 +5,7 @@
 .virtual-dialog {
   @extend .form-dialog;
 
-  .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+  .MuiDialog-paper {
     min-height: 41rem;
   }
 }
