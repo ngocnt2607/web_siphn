@@ -84,14 +84,17 @@ export class HttpService {
         return res;
       },
       (err) => {
-        const { status } = err.response;
+        const { status, data } = err.response;
 
-        if (status === 401) {
+        if (status === 401 && !window.location.pathname.includes('login')) {
           addToast({ message: Message.LOGIN_AGAIN, type: 'error' });
           store.dispatch(logout());
           window.location.href = '/login';
         } else {
-          addToast({ message: Message.COMMON_ERROR, type: 'error' });
+          addToast({
+            message: data?.description || Message.COMMON_ERROR,
+            type: 'error',
+          });
         }
 
         throw err;
