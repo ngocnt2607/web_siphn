@@ -12,7 +12,9 @@ function HomePage() {
       </Helmet>
 
       <div className="welcome">
-        <Typography variant="h3">Welcome to MNP & Call Managememt System</Typography>
+        <Typography variant="h3">
+          Welcome to MNP & Call Managememt System
+        </Typography>
       </div>
     </>
   );

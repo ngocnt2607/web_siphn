@@ -150,7 +150,7 @@ function ParticlesAuth({ children }) {
             <div className="col-lg-12">
               <div className="text-center">
                 <p className="mb-0 text-muted">
-                  MNP &amp; Call Managememt System - Copyright by Leeon Technology
+                  MNP & Call Management System - Copyright by Leeon Technology
                 </p>
               </div>
             </div>
