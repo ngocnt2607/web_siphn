@@ -150,7 +150,7 @@ function ParticlesAuth({ children }) {
             <div className="col-lg-12">
               <div className="text-center">
                 <p className="mb-0 text-muted">
-                  &copy; {new Date().getFullYear()} Web MNP
+                  MNP &amp; CM System - Copyright by Leeon Technology
                 </p>
               </div>
             </div>
