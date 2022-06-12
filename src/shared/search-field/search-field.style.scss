@@ -1,0 +1,24 @@
+.search-bar {
+  .search-field {
+    .MuiOutlinedInput-root {
+      width: 350px;
+      border-top-left-radius: 15px;
+      border-bottom-left-radius: 15px;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+
+    .MuiButton-root {
+      border-radius: 15px;
+    }
+  }
+
+  .p-button-search {
+    height: 48px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    text-transform: none;
+  }
+}

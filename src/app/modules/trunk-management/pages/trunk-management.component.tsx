@@ -13,13 +13,15 @@ import CustomRow from 'shared/blocks/custom-row/custom-row.component';
 import useChangePageSize from 'app/hooks/change-page-size.hook';
 import { ROW_PAGE_OPTIONS } from 'shared/const/data-grid.const';
 import { PageName } from 'shared/const/drawer.const';
+import SearchField from 'shared/search-field/search-field.component';
 import useTrunkDialog from '../components/trunk-dialog/trunk-dialog.component';
 import { TrunkForm } from '../shared/trunk-dialog.const';
 
 function TrunkManagement() {
   const { openTrunkDialog, TrunkDialog, closeTrunkDialog } = useTrunkDialog();
   const [loading, setLoading] = useState<boolean>(false);
-  const listTrunk = useRef<TrunkInfo[]>();
+  const listTrunkAll = useRef<TrunkInfo[]>([]);
+  const [listTrunk, setListTrunk] = useState<TrunkInfo[]>([]);
   const { pageSize, changePageSize } = useChangePageSize();
 
   const COLUMN_CONFIG = useRef<GridColDef[]>([
@@ -127,16 +129,24 @@ function TrunkManagement() {
       setLoading(true);
       const result = await TrunkAPI.getListTrunk();
       if (result) {
-        listTrunk.current = result.groupIps.map((item, index) => ({
+        listTrunkAll.current = result.groupIps.map((item, index) => ({
           ...item,
           no: index + 1,
         }));
       }
+      setListTrunk([...listTrunkAll.current]);
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
   }, []);
+
+  const onLocalSearch = (search: string) => {
+    const searchData = listTrunkAll.current.filter((item) =>
+      item.trunkName.toLowerCase().includes(search.trim().toLowerCase())
+    );
+    setListTrunk(searchData);
+  };
 
   useEffect(() => {
     getListTrunk();
@@ -152,6 +162,11 @@ function TrunkManagement() {
 
       <Container maxWidth="xl" className="table-page">
         <div className="create-button">
+          <SearchField
+            placeholder="Nhập tên Trunk"
+            handleSearch={onLocalSearch}
+          />
+
           <Button
             variant="contained"
             color="primary"
@@ -165,7 +180,7 @@ function TrunkManagement() {
 
         <div className="data-grid">
           <DataGrid
-            rows={listTrunk.current || []}
+            rows={listTrunk}
             columns={COLUMN_CONFIG}
             pageSize={pageSize}
             onPageSizeChange={changePageSize}

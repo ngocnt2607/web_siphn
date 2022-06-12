@@ -11,13 +11,15 @@ import addToast from 'shared/blocks/toastify/add-toast.component';
 import { ROW_PAGE_OPTIONS } from 'shared/const/data-grid.const';
 import { Message } from 'shared/const/message.const';
 import { STATUS_OPTIONS } from 'shared/const/select-option.const';
+import SearchFieldComponent from 'shared/search-field/search-field.component';
 import { CustomerInfoForm } from '../../shared/customer-info-dialog.type';
 import useCustomerInfoDialog from '../customer-info-dialog/customer-info-dialog.component';
 
 function CustomerInfoTab() {
   const { openCustomerInfo, CustomerInfoDialog, closeCustomerInfo } =
     useCustomerInfoDialog();
-  const customerList = useRef<CustomerInfo[]>();
+  const customerListAll = useRef<CustomerInfo[]>([]);
+  const [customerList, setCustomerList] = useState<CustomerInfo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { changePageSize, pageSize } = useChangePageSize();
 
@@ -106,16 +108,24 @@ function CustomerInfoTab() {
       setLoading(true);
       const result = await CustomerAPI.getListCustomer();
       if (result) {
-        customerList.current = result.customers.map((item, index) => ({
+        customerListAll.current = result.customers.map((item, index) => ({
           ...item,
           no: index + 1,
         }));
       }
+      setCustomerList([...customerListAll.current]);
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
   }, []);
+
+  const onLocalSearch = (search: string) => {
+    const searchList = customerListAll.current.filter((item) =>
+      item.customerName.toLowerCase().includes(search.trim().toLowerCase())
+    );
+    setCustomerList(searchList);
+  };
 
   useEffect(() => {
     getListCustomer();
@@ -125,7 +135,12 @@ function CustomerInfoTab() {
     <>
       <LoadingComponent open={loading} />
 
-      <div className="create-button">
+      <div className="create-button mt--S">
+        <SearchFieldComponent
+          placeholder="Nhập tên Khách hàng"
+          handleSearch={onLocalSearch}
+        />
+
         <Button
           variant="contained"
           color="primary"
@@ -139,7 +154,7 @@ function CustomerInfoTab() {
 
       <div className="data-grid">
         <DataGrid
-          rows={customerList.current || []}
+          rows={customerList}
           columns={COLUMN_CONFIG}
           pageSize={pageSize}
           onPageSizeChange={changePageSize}

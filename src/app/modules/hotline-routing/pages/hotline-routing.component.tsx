@@ -16,12 +16,14 @@ import { ROW_PAGE_OPTIONS } from 'shared/const/data-grid.const';
 import { PageName } from 'shared/const/drawer.const';
 import { Message } from 'shared/const/message.const';
 import { STATUS_OPTIONS } from 'shared/const/select-option.const';
+import SearchFieldComponent from 'shared/search-field/search-field.component';
 import { HotlineRoutingTableInfo } from '../shared/hotline-routing.const';
 
 function HotlineRoutingPage() {
   const [loading, setLoading] = useState<boolean>(false);
-  const listDataHaveTrunk = useRef<HotlineRoutingTableInfo[]>([]);
+  const listDataHaveTrunkAll = useRef<HotlineRoutingTableInfo[]>([]);
   const listDataNotTrunk = useRef<HotlineRouting[]>([]);
+  const [listData, setListData] = useState<HotlineRoutingTableInfo[]>([]);
   const { changePageSize, pageSize } = useChangePageSize();
   const { HotlineRoutingDialog, closeHotlineRouting, openHotlineRouting } =
     useHotlineRoutingDialog();
@@ -100,7 +102,7 @@ function HotlineRoutingPage() {
       initialValues,
       title: 'Cập nhật Trunk cho nhóm Hotline',
       isUpdate: true,
-      listCustomerGroup: listDataHaveTrunk.current,
+      listCustomerGroup: listDataHaveTrunkAll.current,
     });
   };
 
@@ -116,7 +118,7 @@ function HotlineRoutingPage() {
     try {
       setLoading(true);
       const { customerId, hotlineGroupId, trunkId, status } = data;
-      const findData = listDataHaveTrunk.current.find(
+      const findData = listDataHaveTrunkAll.current.find(
         (item) => String(item.hotlineGroupId) === hotlineGroupId
       );
       const callAPI = [];
@@ -181,7 +183,7 @@ function HotlineRoutingPage() {
             dataNotTrunk.push(item);
           }
         });
-        listDataHaveTrunk.current = dataHaveTrunk;
+        listDataHaveTrunkAll.current = dataHaveTrunk;
         listDataNotTrunk.current = dataNotTrunk;
       }
 
@@ -190,6 +192,17 @@ function HotlineRoutingPage() {
       setLoading(false);
     }
   }, []);
+
+  const onLocalSearch = (search: string) => {
+    const convertSearch = search.trim().toLowerCase();
+    const searchList = listDataHaveTrunkAll.current.filter(
+      (item) =>
+        item.customerName.toLowerCase().includes(convertSearch) ||
+        item.hotlineGroupName.toLowerCase().includes(convertSearch) ||
+        item.trunkName.toLowerCase().includes(convertSearch)
+    );
+    setListData(searchList);
+  };
 
   useEffect(() => {
     getListHotline();
@@ -205,6 +218,11 @@ function HotlineRoutingPage() {
         </Helmet>
 
         <div className="create-button">
+          <SearchFieldComponent
+            placeholder="Nhập tên Khách hàng, Trunk, Hotline"
+            handleSearch={onLocalSearch}
+          />
+
           <Button
             variant="contained"
             color="primary"
@@ -218,7 +236,7 @@ function HotlineRoutingPage() {
 
         <div className="data-grid">
           <DataGrid
-            rows={listDataHaveTrunk.current ? listDataHaveTrunk.current : []}
+            rows={listData}
             columns={COLUMN_CONFIG}
             pageSize={pageSize}
             onPageSizeChange={changePageSize}

@@ -11,6 +11,7 @@ import addToast from 'shared/blocks/toastify/add-toast.component';
 import { ROW_PAGE_OPTIONS } from 'shared/const/data-grid.const';
 import { Message } from 'shared/const/message.const';
 import { STATUS_OPTIONS } from 'shared/const/select-option.const';
+import SearchFieldComponent from 'shared/search-field/search-field.component';
 import { VirtualGroupInfo } from '../../shared/customer.type';
 import { GroupVirtualForm } from '../../shared/virtual-group-dialog.type';
 import useVirtualGroupDialog from '../virtual-group-dialog/virtual-group-dialog.component';
@@ -18,7 +19,11 @@ import useVirtualGroupDialog from '../virtual-group-dialog/virtual-group-dialog.
 function VirtualGroup() {
   const { VirtualGroupDialog, closeVirtualGroup, openVirtualGroup } =
     useVirtualGroupDialog();
-  const groupVirtualList = useRef<VirtualGroupInfo[]>();
+  const groupVirtualListAll = useRef<VirtualGroupInfo[]>([]);
+  const [groupVirtualList, setGroupVirtualList] = useState<VirtualGroupInfo[]>(
+    []
+  );
+
   const [loading, setLoading] = useState<boolean>(false);
   const { changePageSize, pageSize } = useChangePageSize();
 
@@ -88,7 +93,7 @@ function VirtualGroup() {
       setLoading(true);
       const result = await CustomerAPI.getListVirtual();
       if (result) {
-        groupVirtualList.current = result.virtualNumberGroups.map(
+        groupVirtualListAll.current = result.virtualNumberGroups.map(
           (item, index) => ({
             ...item,
             id: index + 1,
@@ -101,11 +106,21 @@ function VirtualGroup() {
           })
         );
       }
+      setGroupVirtualList([...groupVirtualListAll.current]);
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
   }, []);
+
+  const onLocalSearch = (search: string) => {
+    const searchList = groupVirtualListAll.current.filter(
+      (item) =>
+        item.customerName.toLowerCase().includes(search.trim().toLowerCase()) ||
+        item.stringVirtual.includes(search.trim())
+    );
+    setGroupVirtualList(searchList);
+  };
 
   useEffect(() => {
     getListVirtualGroup();
@@ -115,7 +130,12 @@ function VirtualGroup() {
     <>
       <LoadingComponent open={loading} />
 
-      <div className="create-button">
+      <div className="create-button mt--S">
+        <SearchFieldComponent
+          placeholder="Nhập tên Khách hàng, số Virtual"
+          handleSearch={onLocalSearch}
+        />
+
         <Button
           variant="contained"
           color="primary"
@@ -129,7 +149,7 @@ function VirtualGroup() {
 
       <div className="data-grid">
         <DataGrid
-          rows={groupVirtualList.current || []}
+          rows={groupVirtualList}
           columns={COLUMN_CONFIG}
           pageSize={pageSize}
           onPageSizeChange={changePageSize}
