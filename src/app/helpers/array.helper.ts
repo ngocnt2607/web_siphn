@@ -1,16 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SelectItem } from 'shared/form/select/select-controller.component';
 
-export const convertStringToSelectItem = (
-  stringHotline?: string
-): SelectItem[] => {
-  if (!stringHotline) return [];
-
-  return stringHotline
-    .split(/[,;]/)
-    .map((item) => ({ label: item, value: item }));
-};
-
 export const convertArrayToSelectItem = <T>(
   array: any[],
   label: keyof T,
