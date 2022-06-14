@@ -132,7 +132,7 @@ export default class CustomerAPI {
     ipId,
     status,
   }: UpdateCustomerIP) => {
-    return httpService.post(`/customer/${customerId}/whitelist-ip/${ipId}`, {
+    return httpService.put(`/customer/${customerId}/whitelist-ip/${ipId}`, {
       body: { status },
     });
   };

@@ -92,34 +92,18 @@ function CustomerInfoTab() {
       });
 
       const arrayIP = ips.map((item) => item.label || item);
-      const initialCustomer = customerList.find((item) => item.id === id);
+      const initialCustomer = customerListAll.current.find(
+        (item) => item.id === id
+      );
       const initialIP = initialCustomer?.wlIps?.map((wlIp) => wlIp.ip) || [];
       const addNewIP = getDifferenceTwoArray(arrayIP, initialIP);
       const deleteIP = getDifferenceTwoArray(initialIP, arrayIP);
-      const addStatusIP = arrayIP.filter(
-        (item) =>
-          !addNewIP.includes(item as string) &&
-          !deleteIP.includes(item as string)
-      );
 
       if (addNewIP.length) {
         callAPI.push(() => {
           return CustomerAPI.addCustomerIP({
             customerId: id || '',
             ips: addNewIP,
-          });
-        });
-      }
-
-      if (addStatusIP.length) {
-        addStatusIP.forEach((ip) => {
-          const findIP = initialCustomer?.wlIps?.find((item) => item.ip === ip);
-          callAPI.push(() => {
-            return CustomerAPI.changeStatusCustomerIP({
-              customerId: id || '',
-              ipId: findIP?.wlIpId,
-              status: 1,
-            });
           });
         });
       }

@@ -186,7 +186,7 @@ function HotlineRoutingPage() {
         listDataHaveTrunkAll.current = dataHaveTrunk;
         listDataNotTrunk.current = dataNotTrunk;
       }
-
+      setListData([...listDataHaveTrunkAll.current]);
       setLoading(false);
     } catch (error) {
       setLoading(false);
