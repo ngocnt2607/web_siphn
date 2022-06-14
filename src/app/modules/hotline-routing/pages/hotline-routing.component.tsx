@@ -1,11 +1,12 @@
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button, Container, Link } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import CustomerAPI from 'app/api/customer.api';
 import HotlineRoutingAPI, { HotlineRouting } from 'app/api/hotline-routing.api';
 import useChangePageSize from 'app/hooks/change-page-size.hook';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
 import CellAction from 'shared/blocks/cell-action/cell-action.component';
 import CustomRow from 'shared/blocks/custom-row/custom-row.component';
 import LoadingComponent from 'shared/blocks/loading/loading.component';
@@ -46,8 +47,8 @@ function HotlineRoutingPage() {
 
         return (
           <Link
-            href={`/admin/customer-management/hotline-detail/${customerId}/${hotlineGroupId}`}
-            underline="none"
+            to={`/admin/customer-management/hotline-detail/${customerId}/${hotlineGroupId}`}
+            style={{ textDecoration: 'none' }}
           >
             {cellValues.row.hotlineGroupName}
           </Link>
@@ -63,8 +64,8 @@ function HotlineRoutingPage() {
         const { groupCode, trunkId } = cellValues.row;
         return (
           <Link
-            href={`/admin/trunk-management/detail/${groupCode}/${trunkId}`}
-            underline="none"
+            to={`/admin/trunk-management/detail/${groupCode}/${trunkId}`}
+            style={{ textDecoration: 'none' }}
           >
             {cellValues.row.trunkName}
           </Link>
