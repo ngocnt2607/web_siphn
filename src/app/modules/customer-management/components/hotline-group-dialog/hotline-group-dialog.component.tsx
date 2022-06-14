@@ -47,15 +47,16 @@ function useHotlineGroupDialog() {
       stringHotline: yup.string(),
     })
   ).current;
-  const { control, handleSubmit, reset, setValue } = useForm<GroupHotlineForm>({
-    defaultValues: {
-      customerId: '',
-      stringHotline: '',
-      groupHotlineName: '',
-      hotline: [],
-    },
-    resolver: yupResolver(schema),
-  });
+  const { control, handleSubmit, reset, setValue, watch } =
+    useForm<GroupHotlineForm>({
+      defaultValues: {
+        customerId: '',
+        stringHotline: '',
+        groupHotlineName: '',
+        hotline: [],
+      },
+      resolver: yupResolver(schema),
+    });
 
   const openHotlineGroup = ({
     title,
@@ -257,6 +258,8 @@ function useHotlineGroupDialog() {
                         control={control}
                         placeholder="Nhập số Hotline"
                         className="admin-text-field"
+                        setValue={setValue}
+                        value={watch('hotline')}
                       />
                     </Grid>
                   </div>

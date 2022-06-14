@@ -2,6 +2,10 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Button } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import CustomerAPI, { CustomerInfo } from 'app/api/customer.api';
+import {
+  convertStringToArray,
+  getDifferenceTwoArray,
+} from 'app/helpers/array.helper';
 import useChangePageSize from 'app/hooks/change-page-size.hook';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import CellActionComponent from 'shared/blocks/cell-action/cell-action.component';
@@ -11,13 +15,20 @@ import addToast from 'shared/blocks/toastify/add-toast.component';
 import { ROW_PAGE_OPTIONS } from 'shared/const/data-grid.const';
 import { Message } from 'shared/const/message.const';
 import { STATUS_OPTIONS } from 'shared/const/select-option.const';
+import SearchFieldComponent from 'shared/search-field/search-field.component';
 import { CustomerInfoForm } from '../../shared/customer-info-dialog.type';
 import useCustomerInfoDialog from '../customer-info-dialog/customer-info-dialog.component';
+
+interface CustomerDataTable extends CustomerInfo {
+  no: number;
+  stringIP: string;
+}
 
 function CustomerInfoTab() {
   const { openCustomerInfo, CustomerInfoDialog, closeCustomerInfo } =
     useCustomerInfoDialog();
-  const customerList = useRef<CustomerInfo[]>();
+  const customerListAll = useRef<CustomerDataTable[]>([]);
+  const [customerList, setCustomerList] = useState<CustomerDataTable[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { changePageSize, pageSize } = useChangePageSize();
 
@@ -26,6 +37,12 @@ function CustomerInfoTab() {
     {
       field: 'customerName',
       headerName: 'Tên khách hàng',
+      flex: 1,
+      sortable: false,
+    },
+    {
+      field: 'stringIP',
+      headerName: 'IP',
       flex: 1,
       sortable: false,
     },
@@ -64,12 +81,47 @@ function CustomerInfoTab() {
   const onUpdate = async (data: CustomerInfoForm) => {
     try {
       setLoading(true);
-      const { customerName, description, id } = data;
-      await CustomerAPI.updateCustomer({
-        customerName,
-        description,
-        id: id || 0,
+      const { customerName, description, id, ips } = data;
+      const callAPI = [];
+      callAPI.push(() => {
+        return CustomerAPI.updateCustomer({
+          customerName,
+          description,
+          id: id || '',
+        });
       });
+
+      const arrayIP = ips.map((item) => item.label || item);
+      const initialCustomer = customerListAll.current.find(
+        (item) => item.id === id
+      );
+      const initialIP = initialCustomer?.wlIps?.map((wlIp) => wlIp.ip) || [];
+      const addNewIP = getDifferenceTwoArray(arrayIP, initialIP);
+      const deleteIP = getDifferenceTwoArray(initialIP, arrayIP);
+
+      if (addNewIP.length) {
+        callAPI.push(() => {
+          return CustomerAPI.addCustomerIP({
+            customerId: id || '',
+            ips: addNewIP,
+          });
+        });
+      }
+
+      if (deleteIP.length) {
+        deleteIP.forEach((ip) => {
+          const findIP = initialCustomer?.wlIps?.find((item) => item.ip === ip);
+          callAPI.push(() => {
+            return CustomerAPI.changeStatusCustomerIP({
+              customerId: id || '',
+              ipId: findIP?.wlIpId,
+              status: 0,
+            });
+          });
+        });
+      }
+
+      await Promise.all(callAPI.map((api) => api()));
       await getListCustomer();
       closeCustomerInfo();
       addToast({ message: Message.UPDATE_SUCCESS, type: 'success' });
@@ -81,10 +133,11 @@ function CustomerInfoTab() {
   const onCreate = async (data: CustomerInfoForm) => {
     try {
       setLoading(true);
-      const { description, customerName } = data;
+      const { description, customerName, stringIP } = data;
       await CustomerAPI.createCustomer({
         customerName,
         description,
+        ips: convertStringToArray(stringIP),
       });
       await getListCustomer();
       closeCustomerInfo();
@@ -106,16 +159,31 @@ function CustomerInfoTab() {
       setLoading(true);
       const result = await CustomerAPI.getListCustomer();
       if (result) {
-        customerList.current = result.customers.map((item, index) => ({
+        customerListAll.current = result.customers.map((item, index) => ({
           ...item,
           no: index + 1,
+          stringIP:
+            item.wlIps
+              ?.reduce((prev: string[], current) => {
+                if (current.status) prev.push(current.ip);
+                return prev;
+              }, [])
+              .join(', ') || '',
         }));
       }
+      setCustomerList([...customerListAll.current]);
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
   }, []);
+
+  const onLocalSearch = (search: string) => {
+    const searchList = customerListAll.current.filter((item) =>
+      item.customerName.toLowerCase().includes(search.trim().toLowerCase())
+    );
+    setCustomerList(searchList);
+  };
 
   useEffect(() => {
     getListCustomer();
@@ -125,7 +193,12 @@ function CustomerInfoTab() {
     <>
       <LoadingComponent open={loading} />
 
-      <div className="create-button">
+      <div className="create-button mt--S">
+        <SearchFieldComponent
+          placeholder="Nhập tên Khách hàng"
+          handleSearch={onLocalSearch}
+        />
+
         <Button
           variant="contained"
           color="primary"
@@ -139,7 +212,7 @@ function CustomerInfoTab() {
 
       <div className="data-grid">
         <DataGrid
-          rows={customerList.current || []}
+          rows={customerList}
           columns={COLUMN_CONFIG}
           pageSize={pageSize}
           onPageSizeChange={changePageSize}

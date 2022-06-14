@@ -51,15 +51,16 @@ function useVirtualGroupDialog() {
     })
   ).current;
   const initialGroupVirtual = useRef<VirtualNumberGroup>();
-  const { control, handleSubmit, reset, setValue } = useForm<GroupVirtualForm>({
-    defaultValues: {
-      customerId: '',
-      stringVirtual: '',
-      vngName: '',
-      virtual: [],
-    },
-    resolver: yupResolver(schema),
-  });
+  const { control, handleSubmit, reset, setValue, watch } =
+    useForm<GroupVirtualForm>({
+      defaultValues: {
+        customerId: '',
+        stringVirtual: '',
+        vngName: '',
+        virtual: [],
+      },
+      resolver: yupResolver(schema),
+    });
 
   const openVirtualGroup = ({
     title,
@@ -257,6 +258,8 @@ function useVirtualGroupDialog() {
                         control={control}
                         placeholder="Nhập số Virtual"
                         className="admin-text-field"
+                        setValue={setValue}
+                        value={watch('virtual')}
                       />
                     </Grid>
                   </div>
