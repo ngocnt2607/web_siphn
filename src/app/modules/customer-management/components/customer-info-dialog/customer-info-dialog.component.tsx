@@ -57,8 +57,9 @@ function useCustomerInfoDialog() {
   }: OpenDialogProps) => {
     if (initialValues) {
       const { customerName, description, id, wlIps } = initialValues;
+      const activeIP = wlIps?.filter((item) => item.status);
       const ipOptions = convertArrayToSelectItem<WhitelistIP>(
-        wlIps || [],
+        activeIP || [],
         'ip',
         'wlIpId'
       );
