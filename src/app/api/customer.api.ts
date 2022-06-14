@@ -6,15 +6,23 @@ export interface CustomerList {
 }
 
 export interface CustomerInfo {
-  id: number;
+  id: string;
   customerName: string;
   description: string;
   status?: number;
+  wlIps?: WhitelistIP[];
+}
+
+export interface WhitelistIP {
+  ip: string;
+  wlIpId: string;
+  status: number;
 }
 
 export interface CreateCustomerParams {
   customerName: string;
   description: string;
+  ips: string[];
 }
 
 export interface GroupHotlineList {
@@ -86,6 +94,13 @@ interface UpdateVirtualGroup {
   isdns?: string[];
 }
 
+interface UpdateCustomerIP {
+  customerId: string;
+  ips?: string[];
+  ipId?: string;
+  status?: number;
+}
+
 export default class CustomerAPI {
   // Customer
   static getListCustomer = () => {
@@ -102,6 +117,23 @@ export default class CustomerAPI {
     const { id, ...rest } = params;
     return httpService.put<CustomerInfo>(`/customer/${id}`, {
       body: { ...rest },
+    });
+  };
+
+  // IP
+  static addCustomerIP = ({ customerId, ips }: UpdateCustomerIP) => {
+    return httpService.post(`/customer/${customerId}/whitelist-ip/`, {
+      body: { ips },
+    });
+  };
+
+  static changeStatusCustomerIP = ({
+    customerId,
+    ipId,
+    status,
+  }: UpdateCustomerIP) => {
+    return httpService.put(`/customer/${customerId}/whitelist-ip/${ipId}`, {
+      body: { status },
     });
   };
 

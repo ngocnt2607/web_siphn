@@ -19,14 +19,16 @@ import { PageName } from 'shared/const/drawer.const';
 import { Message } from 'shared/const/message.const';
 import { STATUS_OPTIONS } from 'shared/const/select-option.const';
 import { GroupCodeList } from 'shared/const/trunk.const';
+import SearchFieldComponent from 'shared/search-field/search-field.component';
 import useVirtualRoutingDialog from '../components/virtual-routing-dialog/virtual-routing-dialog.component';
 import { RoutingForm } from '../shared/virtual-routing-dialog.type';
 import { VirtualRoutingTableInfo } from '../shared/virtual-routing.type';
 
 function HotlineRoutingPage() {
   const [loading, setLoading] = useState<boolean>(false);
-  const listDataHaveTrunk = useRef<VirtualRoutingTableInfo[]>([]);
+  const listDataHaveTrunkAll = useRef<VirtualRoutingTableInfo[]>([]);
   const listDataNotTrunk = useRef<VirtualRouting[]>([]);
+  const [listData, setListData] = useState<VirtualRoutingTableInfo[]>([]);
   const { changePageSize, pageSize } = useChangePageSize();
   const { VirtualRoutingDialog, closeVirtualRouting, openVirtualRouting } =
     useVirtualRoutingDialog();
@@ -168,7 +170,7 @@ function HotlineRoutingPage() {
       initialValues,
       title: 'Cập nhật Trunk cho nhóm Virtual',
       isUpdate: true,
-      listCustomerGroup: listDataHaveTrunk.current,
+      listCustomerGroup: listDataHaveTrunkAll.current,
     });
   };
 
@@ -196,7 +198,7 @@ function HotlineRoutingPage() {
         defaultTrunkId,
         virtualGroupId,
       } = data;
-      const findVirtualGroup = listDataHaveTrunk.current.find(
+      const findVirtualGroup = listDataHaveTrunkAll.current.find(
         (item) =>
           String(item.customerId) === customerId &&
           String(item.vngId) === virtualGroupId
@@ -359,15 +361,28 @@ function HotlineRoutingPage() {
             dataNotTrunk.push(item);
           }
         });
-        listDataHaveTrunk.current = dataHaveTrunk;
+        listDataHaveTrunkAll.current = dataHaveTrunk;
         listDataNotTrunk.current = dataNotTrunk;
       }
-
+      setListData([...listDataHaveTrunkAll.current]);
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
   }, []);
+
+  const onLocalSearch = (search: string) => {
+    const convertSearch = search.trim().toLowerCase();
+    const searchList = listDataHaveTrunkAll.current.filter(
+      (item) =>
+        item.customerName.toLowerCase().includes(convertSearch) ||
+        item.vngName.toLowerCase().includes(convertSearch) ||
+        !!item.vngTrunks.find((trunk) =>
+          trunk.trunkName.toLowerCase().includes(convertSearch)
+        )
+    );
+    setListData(searchList);
+  };
 
   useEffect(() => {
     getListVirtual();
@@ -383,6 +398,11 @@ function HotlineRoutingPage() {
         </Helmet>
 
         <div className="create-button">
+          <SearchFieldComponent
+            placeholder="Nhập tên Khách hàng, Trunk, Virtual"
+            handleSearch={onLocalSearch}
+          />
+
           <Button
             variant="contained"
             color="primary"
@@ -396,7 +416,7 @@ function HotlineRoutingPage() {
 
         <div className="data-grid">
           <DataGrid
-            rows={listDataHaveTrunk.current ? listDataHaveTrunk.current : []}
+            rows={listData}
             columns={COLUMN_CONFIG}
             pageSize={pageSize}
             onPageSizeChange={changePageSize}

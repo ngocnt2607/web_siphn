@@ -12,6 +12,7 @@ import addToast from 'shared/blocks/toastify/add-toast.component';
 import { ROW_PAGE_OPTIONS } from 'shared/const/data-grid.const';
 import { Message } from 'shared/const/message.const';
 import { STATUS_OPTIONS } from 'shared/const/select-option.const';
+import SearchFieldComponent from 'shared/search-field/search-field.component';
 import { HotlineGroupInfo } from '../../shared/customer.type';
 import { GroupHotlineForm } from '../../shared/hotline-group-dialog.type';
 import useHotlineGroupDialog from '../hotline-group-dialog/hotline-group-dialog.component';
@@ -19,7 +20,11 @@ import useHotlineGroupDialog from '../hotline-group-dialog/hotline-group-dialog.
 function HotlineGroup() {
   const { HotlineGroupDialog, closeHotlineGroup, openHotlineGroup } =
     useHotlineGroupDialog();
-  const groupHotlineList = useRef<HotlineGroupInfo[]>();
+  const groupHotlineListAll = useRef<HotlineGroupInfo[]>([]);
+  const [groupHotlineList, setGroupHotlineList] = useState<HotlineGroupInfo[]>(
+    []
+  );
+
   const [loading, setLoading] = useState<boolean>(false);
   const { changePageSize, pageSize } = useChangePageSize();
 
@@ -90,22 +95,34 @@ function HotlineGroup() {
       setLoading(true);
       const result = await CustomerAPI.getListGroupHotline();
       if (result) {
-        groupHotlineList.current = result.hotlineGroups.map((item, index) => ({
-          ...item,
-          id: index + 1,
-          stringHotline: item.hotlines
-            .reduce((prev: string[], current) => {
-              if (current.status) prev.push(current.isdn);
-              return prev;
-            }, [])
-            .join(', '),
-        }));
+        groupHotlineListAll.current = result.hotlineGroups.map(
+          (item, index) => ({
+            ...item,
+            id: index + 1,
+            stringHotline: item.hotlines
+              .reduce((prev: string[], current) => {
+                if (current.status) prev.push(current.isdn);
+                return prev;
+              }, [])
+              .join(', '),
+          })
+        );
       }
+      setGroupHotlineList([...groupHotlineListAll.current]);
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
   }, []);
+
+  const onLocalSearch = (search: string) => {
+    const searchList = groupHotlineListAll.current.filter(
+      (item) =>
+        item.customerName.toLowerCase().includes(search.trim().toLowerCase()) ||
+        item.stringHotline.includes(search.trim())
+    );
+    setGroupHotlineList(searchList);
+  };
 
   useEffect(() => {
     getListHotlineGroup();
@@ -115,7 +132,12 @@ function HotlineGroup() {
     <>
       <LoadingComponent open={loading} />
 
-      <div className="create-button">
+      <div className="create-button mt--S">
+        <SearchFieldComponent
+          placeholder="Nhập tên Khách hàng, số Hotline"
+          handleSearch={onLocalSearch}
+        />
+
         <Button
           variant="contained"
           color="primary"
@@ -129,7 +151,7 @@ function HotlineGroup() {
 
       <div className="data-grid">
         <DataGrid
-          rows={groupHotlineList.current || []}
+          rows={groupHotlineList}
           columns={COLUMN_CONFIG}
           pageSize={pageSize}
           onPageSizeChange={changePageSize}
