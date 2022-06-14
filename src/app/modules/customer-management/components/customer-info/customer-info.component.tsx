@@ -98,12 +98,32 @@ function CustomerInfoTab() {
       const initialIP = initialCustomer?.wlIps?.map((wlIp) => wlIp.ip) || [];
       const addNewIP = getDifferenceTwoArray(arrayIP, initialIP);
       const deleteIP = getDifferenceTwoArray(initialIP, arrayIP);
+      const activeIP =
+        initialCustomer?.wlIps?.reduce((prev: string[], current) => {
+          if (current.status) prev.push(current.ip);
+          return prev;
+        }, []) || [];
+      const addIP = getDifferenceTwoArray(arrayIP, activeIP);
+      const addStatusIP = getDifferenceTwoArray(addIP, addNewIP);
 
       if (addNewIP.length) {
         callAPI.push(() => {
           return CustomerAPI.addCustomerIP({
             customerId: id || '',
             ips: addNewIP,
+          });
+        });
+      }
+
+      if (addStatusIP.length) {
+        addStatusIP.forEach((ip) => {
+          const findIP = initialCustomer?.wlIps?.find((item) => item.ip === ip);
+          callAPI.push(() => {
+            return CustomerAPI.changeStatusCustomerIP({
+              customerId: id || '',
+              ipId: findIP?.wlIpId,
+              status: 1,
+            });
           });
         });
       }
